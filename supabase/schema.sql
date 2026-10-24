@@ -128,6 +128,18 @@ insert into public.class_pricing (name_match, price_cents) values
   ('Sanctuary Meditation', 5000)
 on conflict do nothing;
 
+-- ─── Your first webinars ──────────────────────────────────────
+insert into public.content_items (kind, title, description, media_url, theme, sort_order)
+select * from (values
+  ('webinar', 'Sacred Geometry Deep Dive',
+   'An in-depth webinar on sacred geometry: the shapes and patterns that appear throughout nature, art and architecture, and how to work with them in your own spiritual practice.',
+   'https://youtu.be/Qrx4AbqCYzA', 'Sacred Geometry', 1),
+  ('webinar', 'Learn to meditate, empty your mind, find inner peace & stillness',
+   'A guided introduction to meditation: how to settle the body, quiet a busy mind, and find a place of inner peace and stillness you can return to every day.',
+   'https://youtu.be/ZHm_pqbxzlo', 'Meditation', 2)
+) as v(kind, title, description, media_url, theme, sort_order)
+where not exists (select 1 from public.content_items);
+
 -- ─── Make yourself admin after you have signed up once ───────
 -- update public.profiles set is_admin = true
 --   where id = (select id from auth.users where email = 'marianbarnow@gmail.com');
