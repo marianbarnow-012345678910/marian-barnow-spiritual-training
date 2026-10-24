@@ -27,7 +27,7 @@ export async function getContent(id: string): Promise<ContentItem | null> {
 
 /** IDs of items the visitor has marked as done. */
 export async function listCompleted(userId: string): Promise<Set<string>> {
-  if (isDemo) return new Set(["m2"]);
+  if (isDemo) return new Set();
   const supabase = await createClient();
   const { data } = await supabase.from("content_completions").select("content_id").eq("user_id", userId);
   return new Set((data ?? []).map((r) => r.content_id as string));

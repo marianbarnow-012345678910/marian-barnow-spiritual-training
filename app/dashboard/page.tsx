@@ -30,6 +30,7 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
   const suggestedClasses = schedule.sessions.filter((s) => !bookedIds.has(s.id)).slice(0, 2);
 
   const fresh = [...meditations.filter((m) => !completed.has(m.id)), ...meditations.filter((m) => completed.has(m.id))].slice(0, 3);
+  const { recordings } = splitWebinars(webinars);
   const name = firstName(user);
 
   return (
@@ -49,7 +50,7 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
         <p>
           {completed.size > 0
             ? `You've completed ${completed.size} ${completed.size === 1 ? "practice" : "practices"} so far. Pick up where you left off, or try something new.`
-            : "Everything here is yours to use freely. Start with a short meditation below."}
+            : "Everything here is yours to use freely. Start with one of the recordings below."}
         </p>
       </section>
 
@@ -116,6 +117,18 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
             </Link>
           </div>
           <LibraryList items={fresh} completed={completed} base="/dashboard/meditations" />
+        </section>
+      )}
+
+      {fresh.length === 0 && recordings.length > 0 && (
+        <section className="section">
+          <div className="section-head">
+            <h2>Watch now</h2>
+            <Link className="link" href="/dashboard/webinars">
+              All webinars
+            </Link>
+          </div>
+          <LibraryList items={recordings.slice(0, 3)} completed={completed} base="/dashboard/webinars" />
         </section>
       )}
 
